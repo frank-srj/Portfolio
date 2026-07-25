@@ -1,0 +1,12 @@
+---
+alwaysApply: true
+---
+This is a personal portfolio site.
+Stack: React + Vite, Tailwind CSS v4.
+Design tokens are defined as CSS variables in src/index.css inside an @theme block.
+Always use semantic Tailwind classes from these tokens (e.g. bg-surface-primary,
+text-text-primary, text-text-secondary, border-border-primary) instead of default
+Tailwind colors or hardcoded hex values.
+Use the spacing scale (p-4, gap-6, etc.) and radius scale (rounded-xl, etc.)
+already defined in the theme — don't invent new values.
+Components go in src/components/.

@@ -1,0 +1,247 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Geist";
+  src: url("./assets/fonts/Geist-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist";
+  src: url("./assets/fonts/Geist-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist Mono";
+  src: url("./assets/fonts/GeistMono-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  /* Fonts */
+  --font-sans: "Geist", sans-serif;
+  --font-mono: "Geist Mono", monospace;
+
+  /* Brand + Neutrals (primitives) */
+  --color-brand: #0073ff;
+  --color-neutral-10: #f7f9fb;
+  --color-neutral-20: #edf0f4;
+  --color-neutral-30: #dde2e8;
+  --color-neutral-40: #c5ccd4;
+  --color-neutral-50: #abb4be;
+  --color-neutral-60: #878f98;
+  --color-neutral-70: #6b7480;
+  --color-neutral-80: #4f5b68;
+  --color-neutral-90: #32404f;
+  --color-neutral-100: #232d38;
+  --color-neutral-black: #000000;
+  --color-neutral-white: #ffffff;
+
+  /* Semantic colors (tokens.mode1) — use these in your components */
+  --color-border-primary: #dde2e8;
+  --color-icon-primary: #32404f;
+  --color-icon-secondary: #878f98;
+  --color-surface-primary: #ffffff;
+  --color-surface-secondary: #edf0f4;
+  --color-surface-tertiary: #dde2e8;
+  --color-text-disabled: #ffffff;
+  --color-text-invert: #ffffff;
+  --color-text-primary: #32404f;
+  --color-text-secondary: #878f98;
+
+  /* Radius */
+  --radius-none: 0px;
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 24px;
+  --radius-4xl: 32px;
+  --radius-6xl: 48px;
+  --radius-ios: 58px;
+  --radius-full: 999px;
+
+  /* Spacing */
+  --spacing-0: 0px;
+  --spacing-05: 2px;
+  --spacing-1: 4px;
+  --spacing-15: 6px;
+  --spacing-2: 8px;
+  --spacing-25: 10px;
+  --spacing-3: 12px;
+  --spacing-35: 14px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-7: 28px;
+  --spacing-8: 32px;
+  --spacing-9: 36px;
+  --spacing-10: 40px;
+  --spacing-11: 44px;
+  --spacing-12: 48px;
+  --spacing-13: 52px;
+  --spacing-14: 56px;
+  --spacing-16: 64px;
+  --spacing-20: 80px;
+  --spacing-24: 96px;
+  --spacing-28: 112px;
+  --spacing-32: 128px;
+  --spacing-36: 144px;
+  --spacing-40: 160px;
+
+  /* Shared right-rail: navbar links + hero resume (= case-study content min) */
+  --width-content-min: 531px;
+  --width-rail: 531px;
+}
+
+/*
+  Keep the navbar/hero rail (Work/Play/Resume + resume list) aligned with the
+  case-study content column — continuously, so it never jumps.
+
+  --case-pad mirrors the single-column card pad math (100vw card, padding
+  spacing-32 → spacing-3). The rail's end margin = --case-pad − spacing-3, which
+  places the rail's right edge exactly on the content column's right edge at all
+  widths: it glides inward as the page widens (padding relaxes) and outward to
+  spacing-6 as the page narrows (padding fully compressed). No clamp step, no
+  grid breakpoint in this math → no jump.
+
+  Note: this is intentionally computed from single-column geometry only, so it
+  stays continuous across the 2×2 grid breakpoint too.
+*/
+:root {
+  --case-image-base: 683px;
+  --case-card-width: calc(100vw - 2 * var(--spacing-3));
+  --case-pad: clamp(
+    var(--spacing-3),
+    calc(
+      (
+          var(--case-card-width) - var(--case-image-base) - var(--spacing-6) -
+            var(--width-content-min)
+        ) /
+        2
+    ),
+    var(--spacing-32)
+  );
+  --rail-margin-end: max(0px, calc(var(--case-pad) - var(--spacing-3)));
+
+  /* Contact sheet (stacked): content column + gap + close icon */
+  --contact-content-width: 462px;
+  --contact-close-width: 50px;
+  --contact-wrapper-width: calc(
+    var(--contact-content-width) + var(--spacing-1) + var(--contact-close-width)
+  );
+  --page-min-width: 548px;
+}
+
+html,
+body,
+#root {
+  min-width: var(--page-min-width);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out forwards;
+}
+
+@keyframes slide-in-bl {
+  from {
+    opacity: 0;
+    transform: translate(-150px, 150px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+.animate-slide-in-bl {
+  animation: slide-in-bl 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(var(--sheet-slide, 100%));
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+@keyframes slide-down {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(var(--sheet-slide, 100%));
+  }
+}
+
+.animate-slide-down {
+  animation: slide-down 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Background sheet: dissolve in while scaling down into place */
+@keyframes sheet-bg-in {
+  from {
+    opacity: 0;
+    transform: scale(1.12);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-sheet-bg-in {
+  animation: sheet-bg-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+/* Previous open sheet settles into the background-sheet slot */
+@keyframes sheet-become-bg {
+  from {
+    transform: translateY(var(--spacing-5)) scale(1.04);
+  }
+  to {
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-sheet-become-bg {
+  transform-origin: top center;
+  animation: sheet-become-bg 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+}
+
+/* Previous-sheet content dissolves away, leaving neutrals/10 */
+@keyframes sheet-bg-dissolve {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.animate-sheet-bg-dissolve {
+  /* Overlaps the settle so settle + dissolve read as one gesture */
+  animation: sheet-bg-dissolve 1.05s cubic-bezier(0.33, 0, 0.2, 1) 0.25s forwards;
+}
