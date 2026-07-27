@@ -62,7 +62,7 @@ function Resume({ items, rowGap = '' }) {
 
 function Header({ onContactClick }) {
   return (
-    <div className="flex w-full flex-col items-end gap-4 px-6 pb-8 pt-16">
+    <div className="flex w-full flex-col items-end gap-4 px-6 pb-8 pt-8">
       <div className="flex w-full flex-col gap-12">
         <h1 className="w-full font-sans text-[42px] font-normal leading-[48px] tracking-[-2px] text-text-primary">
           I&apos;m Frank,
