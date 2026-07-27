@@ -90,7 +90,9 @@ const projects = {
   figma: {
     id: 'figma',
     banner: figmaBanner,
-    bannerClassName: 'object-cover object-right',
+    // Ultra-wide source (~2.3:1); scale up so the crop matches the tighter
+    // fill of the taller Urban/Orbit banners, centered in frame.
+    bannerClassName: 'origin-center scale-[1.75] object-cover object-center',
     tags: [
       { label: 'Concept 2025', outline: true },
       { label: '3 Designers', outline: true },
