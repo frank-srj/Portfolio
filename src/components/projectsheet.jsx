@@ -32,7 +32,7 @@ import figmaDeliverable1 from '../assets/case-studies/figma-sustainable-mode/del
 import figmaDeliverable2 from '../assets/case-studies/figma-sustainable-mode/deliverable-2.webp'
 import figmaDeliverable3 from '../assets/case-studies/figma-sustainable-mode/deliverable-3.webp'
 
-import orbitBanner from '../assets/case-studies/orbit/Orbit_Thumbnail.png'
+import orbitBanner from '../assets/case-studies/orbit/Orbit_Thumbnail.webp'
 import marketApps from '../assets/case-studies/orbit/market-apps.webp'
 import stickyNotes from '../assets/case-studies/orbit/sticky-notes.webp'
 import orbitSearch from '../assets/case-studies/orbit/orbit-search.webp'
