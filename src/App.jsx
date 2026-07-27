@@ -3,6 +3,8 @@ import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import CaseStudies from './components/CaseStudies'
 import Footer from './components/Footer'
+import SiteFooter from './components/SiteFooter'
+import Colophone from './components/Colophone'
 import ContactSheet from './components/contactsheet'
 import ProjectSheet from './components/projectsheet'
 import HomeMobile from './components/HomeMobile'
@@ -20,17 +22,29 @@ function App() {
   const closeProject = () => setActiveProject(null)
   const projectOpen = activeProject != null
 
-  // Clicking the navbar name always returns to the homepage.
+  const [page, setPage] = useState('home')
+
+  // Page swaps land at the top rather than inheriting the previous scroll.
+  const goTo = (nextPage) => {
+    setPage(nextPage)
+    window.scrollTo({ top: 0 })
+  }
+
   const goHome = () => {
     setContactOpen(false)
     setActiveProject(null)
+    goTo('home')
   }
+
+  const openColophone = () => goTo('colophone')
 
   return (
     <div className="relative min-h-screen w-full max-w-full overflow-x-clip bg-surface-primary text-text-primary">
       <Navbar
         onContactClick={openContact}
         onHomeClick={goHome}
+        onWorkClick={goHome}
+        workActive={page === 'home'}
         contactOpen={contactOpen}
       />
       {/* Homepage content (minus navbar) sinks down while dissolving as the
@@ -42,16 +56,26 @@ function App() {
             : 'translate-y-0 opacity-100'
         }`}
       >
-        {isPhone ? (
+        {page === 'colophone' ? (
+          <div className="flex min-h-[calc(100svh-var(--nav-height,64px))] flex-col bg-surface-secondary">
+            <Colophone />
+            <SiteFooter
+              onColophoneClick={openColophone}
+              className="bg-surface-secondary"
+            />
+          </div>
+        ) : isPhone ? (
           <HomeMobile
             onContactClick={openContact}
             onProjectOpen={openProject}
+            onColophoneClick={openColophone}
           />
         ) : (
           <>
             <Hero onContactClick={openContact} />
             <CaseStudies onProjectOpen={openProject} />
             <Footer />
+            <SiteFooter onColophoneClick={openColophone} />
           </>
         )}
       </div>

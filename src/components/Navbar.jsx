@@ -2,15 +2,15 @@ import { useEffect, useState } from "react"
 import cvPdf from "../assets/CV_Stryj-Frank.pdf"
 
 const navLinks = [
-  { label: "Work", active: true },
+  { label: "Work" },
   // Play site not live yet — set visible: true when ready.
-  { label: "Play", active: false, visible: false },
-  { label: "Resume", active: false, href: cvPdf, external: true },
+  { label: "Play", visible: false },
+  { label: "Resume", href: cvPdf, external: true },
 ]
 
 const visibleNavLinks = navLinks.filter((link) => link.visible !== false)
 
-function NavLink({ link, onClick }) {
+function NavLink({ link, active = false, onClick }) {
   return (
     <a
       href={link.href ?? "#"}
@@ -18,10 +18,10 @@ function NavLink({ link, onClick }) {
       rel={link.external ? "noreferrer" : undefined}
       onClick={onClick}
       className={`flex items-center gap-2 font-mono text-[15px] leading-[22px] transition-colors ${
-        link.active ? "text-brand" : "text-text-secondary hover:text-brand"
+        active ? "text-brand" : "text-text-secondary hover:text-brand"
       }`}
     >
-      {link.active && (
+      {active && (
         <span
           aria-hidden="true"
           className="size-1.5 rounded-full bg-brand"
@@ -32,7 +32,13 @@ function NavLink({ link, onClick }) {
   )
 }
 
-function Navbar({ onContactClick, onHomeClick, contactOpen = false }) {
+function Navbar({
+  onContactClick,
+  onHomeClick,
+  onWorkClick,
+  workActive = true,
+  contactOpen = false,
+}) {
   const [menuOpen, setMenuOpen] = useState(false)
 
   // Keep the menu open under the contact sheet (avoids a layout jump), then
@@ -70,6 +76,15 @@ function Navbar({ onContactClick, onHomeClick, contactOpen = false }) {
   }
 
   const closeMenu = () => setMenuOpen(false)
+
+  // "Work" is the homepage, so it navigates rather than following its href.
+  const handleNavClick = (link, afterClick) => (event) => {
+    if (link.label === "Work") {
+      event.preventDefault()
+      onWorkClick?.()
+    }
+    afterClick?.()
+  }
 
   return (
     <nav className="sticky top-0 z-50 border-b border-border-primary bg-surface-primary">
@@ -133,7 +148,12 @@ function Navbar({ onContactClick, onHomeClick, contactOpen = false }) {
           >
             <div className="flex flex-col items-start justify-center gap-3">
               {visibleNavLinks.map((link) => (
-                <NavLink key={link.label} link={link} onClick={closeMenu} />
+                <NavLink
+                  key={link.label}
+                  link={link}
+                  active={link.label === "Work" && workActive}
+                  onClick={handleNavClick(link, closeMenu)}
+                />
               ))}
             </div>
 
@@ -163,7 +183,12 @@ function Navbar({ onContactClick, onHomeClick, contactOpen = false }) {
         <div className="flex w-[calc(var(--width-rail)+var(--rail-margin-end))] shrink-0 items-center justify-between">
           <div className="flex items-center gap-3">
             {visibleNavLinks.map((link) => (
-              <NavLink key={link.label} link={link} />
+              <NavLink
+                key={link.label}
+                link={link}
+                active={link.label === "Work" && workActive}
+                onClick={handleNavClick(link)}
+              />
             ))}
           </div>
 

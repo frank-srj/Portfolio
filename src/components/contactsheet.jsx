@@ -55,7 +55,7 @@ const copy = {
     'I’m a German product designer based in Amsterdam. I’m open to new work, so if you’re working on something exciting and looking for a designer to join your team, I’d love to connect!',
   aboutLabel: 'About me',
   about:
-    'I enjoy exploring unfamiliar territory and navigating complexity. I combine analytical thinking with creativity to design experiences that feel intuitive, purposeful, and refined. Above all, I think deeply about the people behind the product, the details that shape experiences, and the possibilities that technology can create for the future.',
+    'I enjoy exploring unfamiliar territory and navigating complexity. I combine analytical thinking with creativity to design experiences that feel intuitive, purposeful, and refined. Above all, I think deeply about the people behind the product, the details that shape experiences, and the possibilities that emerge when design and technology come together. I actively explore new tools and workflows, using AI to prototype, build, and bring ideas to life. This portfolio is a reflection of that.',
   funFactLabel: 'A little fun fact',
   funFact:
     'At 16, I built Snapchat geofilters so my friends and I could use them in our hometown. That was the first time I made something simply because I wanted it to exist and seeing people actually use it brought me a lot of joy. That’s still the case today.',
@@ -122,7 +122,7 @@ function MobileSheet({ onClose }) {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Curriculum Vitae"
-                className="flex h-14 w-[58px] items-center justify-center rounded-full bg-surface-secondary font-sans text-xl font-bold tracking-[-0.6px] text-text-primary transition-colors active:bg-surface-tertiary"
+                className="flex h-14 w-[58px] items-center justify-center rounded-full bg-surface-secondary font-sans text-xl font-extrabold tracking-[-0.03em] text-text-primary transition-colors active:bg-surface-tertiary"
               >
                 CV
               </a>
@@ -248,7 +248,7 @@ function DesktopSheet({ onClose, onShare }) {
                         target="_blank"
                         rel="noreferrer"
                         aria-label="Curriculum Vitae"
-                        className="flex h-14 w-[58px] items-center justify-center rounded-full bg-surface-secondary font-sans text-xl font-bold tracking-[-0.6px] text-text-primary transition-colors hover:bg-surface-tertiary"
+                        className="flex h-14 w-[58px] items-center justify-center rounded-full bg-surface-secondary font-sans text-xl font-extrabold tracking-[-0.03em] text-text-primary transition-colors hover:bg-surface-tertiary"
                       >
                         CV
                       </a>

@@ -101,7 +101,7 @@ const projects = {
     ],
     title: 'Figma Sustainable Mode',
     intro:
-      ' is a concept that highlights the impact design decisions have on digital sustainability. By embedding sustainability features directly into Figma, it lowers the barrier to making more sustainable choices in design, addressing a gap most designers aren\u2019t even aware of. The goal was to make that impact visible, understandable, and actionable at the exact moment a design choice',
+      ' is a concept that helps designers understand the environmental impact of their design decisions. By embedding sustainability feedback directly into Figma, it aims to lower the barrier for making better choices, showing the impact at the moment a decision is made, so it\u2019s understandable and actionable right away.',
     navItems: [
       { label: 'My Role', target: 'my-role' },
       { label: 'The Problem', target: 'the-problem' },
@@ -498,7 +498,7 @@ function FigmaCaseStudyContent() {
       >
         <SectionLabel>MY ROLE</SectionLabel>
         <Body>
-          {`In this project, I primarily took on the role of an interaction designer. I defined the user flow and structure behind the concept, iterated the interface through multiple rounds of high-fidelity design, and built the final prototype in Figma. Alongside my teammates, I conducted user research and performed testing.`}
+          {`In this project, I primarily worked as a product designer. I defined the user flow and structure behind the concept, iterated the interface through multiple rounds of high-fidelity design, and built the final prototype in Figma. Alongside my teammates, I conducted user research and performed testing.`}
         </Body>
       </section>
 
@@ -525,7 +525,7 @@ function FigmaCaseStudyContent() {
             <Heading>Embedding Sustainability into Existing Workflows</Heading>
             <div className="flex w-full flex-col items-start gap-8">
               <Body>
-                {`To understand where this influence could actually take shape, I talked with senior designers at ING and Randstad. Sustainability, it turned out, had no real place in their companies' design processes. Most weren't aware of how their individual choices contributed to carbon impact in the first place. Looking further, desk research showed that educational resources and tools did exist, but almost always outside the design process itself, requiring designers to already know to look for them.`}
+                {`To understand where this influence could actually take shape, we talked with senior designers at ING and Randstad. Sustainability turned out to have no real place in their companies' design processes. Most weren't even aware of how their individual choices contributed to carbon impact in the first place. Through desk research we understood that educational resources and tools did exist, but almost always outside the design process itself, requiring designers to know about them in order to look for them.`}
               </Body>
               <div className="flex w-full items-start gap-2 max-[560px]:flex-col">
                 <FramedImage
@@ -686,10 +686,7 @@ function OrbitCaseStudyContent() {
               </div>
               <div className="flex w-full flex-col items-start gap-0">
                 <Body>
-                  {`This insight informed our decision to design around the content itself rather than users' saving logic. We removed the friction at the moment of saving entirely by opting for a single space where all content is stored. We called it the "Orbit".`}
-                </Body>
-                <Body>
-                  {`It is structured chronologically and left unsorted by default. Instead of requiring users to organize this space, we opted for an intelligent tag system, where each item is automatically described through image, speech, text, and video recognition. Users can thereby filter their Orbit intuitively and confidently rediscover content by describing what they're looking for through tags. Combining multiple tags refines the search further.`}
+                  {`This insight informed our decision to design around the content itself rather than users' saving logic. We removed the friction at the moment of saving entirely by opting for a single space where all content is stored. We called it the "Orbit". It is structured chronologically and left unsorted by default. Instead of requiring users to organize this space, we opted for an intelligent tag system, where each item is automatically described through image, speech, text, and video recognition. Users can thereby filter their Orbit intuitively and confidently rediscover content by describing what they're looking for through tags. Combining multiple tags refines the search further.`}
                 </Body>
               </div>
               <figure className="flex w-full flex-col items-start gap-3">
@@ -715,10 +712,7 @@ function OrbitCaseStudyContent() {
             <div className="flex w-full flex-col items-start gap-8">
               <div className="flex w-full flex-col items-start gap-0">
                 <Body>
-                  {`While a tag-based search solved how users retrieve individual items, it didn't address a separate need: sometimes items only make sense together.`}
-                </Body>
-                <Body>
-                  {`Through jobs to be done and persona work, we identified that users often pursue a specific goal, such as furnishing an apartment, that requires multiple items to be considered as a set rather than found one by one.`}
+                  {`While a tag-based search solved how users retrieve individual items, it didn't address a separate need: sometimes items only make sense together. Through jobs to be done and persona work, we identified that users often pursue a specific goal, such as furnishing an apartment, that requires multiple items to be considered as a set rather than found one by one.`}
                 </Body>
               </div>
               <div className="aspect-[663/414] w-full overflow-hidden rounded-xl">
@@ -811,9 +805,6 @@ function UrbanCaseStudyContent() {
           <Body>
             {`With the release of ChatGPT in November 2022, and the rapid adoption that followed, I got curious how this kind of tool might reshape the way people interact with AI more broadly. Based on my own early experiences using it back then, I started noticing real limits within chat-based interaction. Often, once a task got a bit more complex, a single linear thread struggled to offer a satisfying experience.`}
           </Body>
-          <Body>
-            {`Together with Kilian Wachowiak, I set out to question that pattern and explore what an alternative could look like. We chose urban development as the context to design for, however we were not trying to solve it, but its complexity made the limits of chat-based interaction impossible to ignore.`}
-          </Body>
         </div>
       </section>
 
@@ -829,7 +820,7 @@ function UrbanCaseStudyContent() {
             <Heading>Creating A Dual-Layer Response System</Heading>
             <div className="flex w-full flex-col items-start gap-8">
               <Body>
-                {`To understand where chat-based interaction actually broke down, we became our own users. We picked common city development scenarios, reducing street traffic being one of them, and prompted ChatGPT the way a policymaker might, then just kept going. We quickly realized, that refining a scenario meant explaining ourselves over and over again. This included naming the specific factor we wanted to change and often even asking the AI which factors were relevant in the first place before we could adjust anything. `}
+                {`To understand where chat-based interaction actually broke down, we became our own users. We picked common city development scenarios and prompted ChatGPT the way a policymaker might, then just kept going. We quickly realized, that refining a scenario meant explaining ourselves over and over again. This included naming the specific factor we wanted to change and often even asking the AI which factors were relevant in the first place before we could adjust anything. `}
               </Body>
               <figure className="flex w-full flex-col items-start gap-3">
                 <div className="aspect-[663/439] w-full overflow-hidden rounded-xl border border-border-primary">

@@ -2,6 +2,7 @@ import arrowUpRight from '../assets/arrow-up-right.svg'
 import arrowIcon from '../assets/case-studies/icons/arrow.svg'
 import { jobs, studies } from '../data/resume'
 import { caseStudies } from '../data/caseStudies'
+import SiteFooter from './SiteFooter'
 
 /*
   Phone-only homepage (Figma "Home-Mobile"). Rendered instead of the desktop
@@ -175,12 +176,13 @@ function Studies() {
   )
 }
 
-function HomeMobile({ onContactClick, onProjectOpen }) {
+function HomeMobile({ onContactClick, onProjectOpen, onColophoneClick }) {
   return (
     <div className="flex w-full flex-col items-start">
       <Header onContactClick={onContactClick} />
       <CaseStudyList onProjectOpen={onProjectOpen} />
       <Studies />
+      <SiteFooter onColophoneClick={onColophoneClick} />
     </div>
   )
 }

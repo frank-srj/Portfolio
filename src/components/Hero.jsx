@@ -20,12 +20,12 @@ function Claim({ onContactClick }) {
         className="group/frank cursor-pointer"
       >
         <span className="italic transition-all group-hover/frank:underline">Frank</span>
-        <span className="inline-flex h-[60px] w-0 items-center overflow-hidden align-middle opacity-0 transition-all duration-300 -my-[20px] group-hover/frank:w-[68px] group-hover/frank:opacity-100">
+        <span className="inline-flex h-12 w-0 items-center overflow-hidden align-middle opacity-0 transition-all duration-300 -my-4 group-hover/frank:w-14 group-hover/frank:opacity-100 min-[1180px]:h-[60px] min-[1180px]:-my-5 min-[1180px]:group-hover/frank:w-[68px]">
           <span className="w-2 shrink-0"></span>
           <img
             src={frankArrowNew}
             alt=""
-            className="size-[60px] max-w-none shrink-0 object-contain"
+            className="size-12 max-w-none shrink-0 object-contain min-[1180px]:size-[60px]"
           />
         </span>
       </span>
