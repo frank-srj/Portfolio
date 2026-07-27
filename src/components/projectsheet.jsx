@@ -8,6 +8,7 @@ import {
   useState,
 } from 'react'
 import { useIsPhone } from '../hooks/useMediaQuery'
+import SiteFooter from './SiteFooter'
 import closeIcon from '../assets/contact/close.svg'
 import closeIconNeutral from '../assets/contact/close-neutral.svg'
 import productIcon from '../assets/case-studies/icons/product.svg'
@@ -18,6 +19,7 @@ import orbitCard from '../assets/case-studies/orbit.png'
 import figmaCard from '../assets/case-studies/figma-sustainable-mode.png'
 
 import figmaBanner from '../assets/case-studies/figma-sustainable-mode/Figma-Thumbnail.webp'
+import figmaBannerMobile from '../assets/case-studies/figma-sustainable-mode/Figma_Thumbnail_Mobil.webp'
 import carbonCalculator from '../assets/case-studies/figma-sustainable-mode/carbon-calculator.png'
 import greenSoftware from '../assets/case-studies/figma-sustainable-mode/green-software.png'
 import conceptMode from '../assets/case-studies/figma-sustainable-mode/concept-mode.webp'
@@ -42,6 +44,7 @@ import orbitDeliverable3 from '../assets/case-studies/orbit/Orbit_Deliverable_3.
 import orbitDeliverable4 from '../assets/case-studies/orbit/Orbit_Deliverable_4.webp'
 
 import urbanBanner from '../assets/case-studies/urban-projective/Urban_Thumbnail.webp'
+import urbanBannerMobile from '../assets/case-studies/urban-projective/Urban_Thumbnail_mobil.webp'
 import dualLayerResponse from '../assets/case-studies/urban-projective/dual-layer-response.png'
 import mapLayers from '../assets/case-studies/urban-projective/map-layers.png'
 import urbanLogo from '../assets/case-studies/urban-projective/logo.png'
@@ -90,9 +93,13 @@ const projects = {
   figma: {
     id: 'figma',
     banner: figmaBanner,
+    bannerMobile: figmaBannerMobile,
     // Ultra-wide source (~2.3:1); scale up so the crop matches the tighter
-    // fill of the taller Urban/Orbit banners, centered in frame.
-    bannerClassName: 'origin-center scale-[1.75] object-cover object-center',
+    // fill of the taller Urban/Orbit banners, centered in frame. Kept below
+    // 1.75 so the toolbar + callout stay inside the frame on wide monitors.
+    // Phone uses a dedicated mobile crop, so drop the desktop scale.
+    bannerClassName:
+      'origin-center scale-[1.2] object-cover object-center phone:scale-100',
     tags: [
       { label: 'Concept 2025', outline: true },
       { label: '3 Designers', outline: true },
@@ -173,6 +180,7 @@ const projects = {
   urban: {
     id: 'urban',
     banner: urbanBanner,
+    bannerMobile: urbanBannerMobile,
     // Match Figma crop: tall source shifted so the skyline sits in frame.
     bannerClassName: 'object-cover object-[center_32%]',
     tags: [
@@ -910,7 +918,7 @@ function CaseStudyContent() {
 // 1440px content width (1376px media + p-8).
 function FigmaImageGallery() {
   return (
-    <div className="mx-auto flex w-full max-w-[1440px] flex-col items-center gap-5 p-8">
+    <div className="mx-auto flex w-full max-w-[1440px] flex-col items-center gap-5 px-8 py-8 phone:px-2">
       {/* Wide ratio on desktop; on the stacked/narrow breakpoint the frame
          gets taller so the shot reads larger, cropping the right edge. */}
       <div className="aspect-[3/2] w-full overflow-hidden rounded-xl min-[561px]:aspect-[1376/628]">
@@ -939,7 +947,7 @@ function FigmaImageGallery() {
 
 function OrbitImageGallery() {
   return (
-    <div className="mx-auto flex w-full max-w-[1440px] flex-col items-center gap-6 p-8">
+    <div className="mx-auto flex w-full max-w-[1440px] flex-col items-center gap-6 px-8 py-8 phone:px-2">
       <div className="flex w-full items-start gap-6 max-[720px]:flex-col">
         {/* Stacked: taller frame + object-left so the crop eats the right edge.
            Desktop keeps the wide 1033/628 composition. */}
@@ -978,7 +986,7 @@ function OrbitImageGallery() {
 
 function UrbanImageGallery() {
   return (
-    <div className="mx-auto flex w-full max-w-[1440px] flex-col items-center gap-3 p-8">
+    <div className="mx-auto flex w-full max-w-[1440px] flex-col items-center gap-3 px-8 py-8 phone:px-2">
       <div className="flex w-full items-start gap-3 max-[720px]:flex-col">
         <div className="aspect-[722/475] min-w-px flex-[722] overflow-hidden rounded-xl">
           <ZoomableImage
@@ -1171,7 +1179,7 @@ function OtherProjects({ onProjectOpen }) {
 
   return (
     <section className="flex w-full flex-col items-center bg-surface-secondary">
-      <div className="mx-auto flex w-full max-w-[1440px] flex-col items-start gap-5 px-8 pb-24 pt-16">
+      <div className="mx-auto flex w-full max-w-[1440px] flex-col items-start gap-5 px-8 pb-24 pt-16 phone:px-2">
         <div className="flex w-full items-start px-4">
           <h2 className="whitespace-nowrap font-sans text-[32px] font-medium leading-[42px] tracking-[-0.64px] text-text-primary phone:text-[24px] phone:leading-8 phone:tracking-[-0.48px]">
             Other Projects
@@ -1193,7 +1201,7 @@ function OtherProjects({ onProjectOpen }) {
   )
 }
 
-function ProjectSheet({ open, onClose, projectId, onProjectOpen }) {
+function ProjectSheet({ open, onClose, projectId, onProjectOpen, onColophoneClick }) {
   const isPhone = useIsPhone()
   // The sheet's top edge stops spacing-12 below the (sticky) navbar, so the
   // navbar stays visible and interactable above it. Measure the navbar so the
@@ -1363,7 +1371,11 @@ function ProjectSheet({ open, onClose, projectId, onProjectOpen }) {
                 <div className="animate-sheet-bg-dissolve flex h-full w-full flex-col overflow-hidden rounded-t-3xl bg-surface-primary">
                   <div className="relative h-[clamp(160px,15vw+80px,280px)] w-full shrink-0 overflow-clip">
                     <img
-                      src={backgroundProject.banner}
+                      src={
+                        isPhone && backgroundProject.bannerMobile
+                          ? backgroundProject.bannerMobile
+                          : backgroundProject.banner
+                      }
                       alt=""
                       className={`pointer-events-none absolute inset-0 size-full ${backgroundProject.bannerClassName}`}
                     />
@@ -1390,9 +1402,13 @@ function ProjectSheet({ open, onClose, projectId, onProjectOpen }) {
               {/* Project thumbnail — full-bleed banner with the close icon top-right.
                  Height scales with viewport so narrow sheets stay landscape-ish
                  instead of squaring up and over-cropping the wide banner. */}
-              <div className="relative flex h-[clamp(160px,15vw+80px,280px)] w-full shrink-0 flex-col items-end overflow-clip rounded-t-3xl p-8">
+              <div className="relative flex h-[clamp(160px,15vw+80px,280px)] w-full shrink-0 flex-col items-end overflow-clip rounded-t-3xl p-8 phone:h-[537px] phone:p-4">
                 <img
-                  src={project.banner}
+                  src={
+                    isPhone && project.bannerMobile
+                      ? project.bannerMobile
+                      : project.banner
+                  }
                   alt=""
                   className={`pointer-events-none absolute inset-0 size-full ${project.bannerClassName}`}
                 />
@@ -1444,6 +1460,11 @@ function ProjectSheet({ open, onClose, projectId, onProjectOpen }) {
 
               {/* Other projects */}
               <OtherProjects onProjectOpen={onProjectOpen} />
+
+              <SiteFooter
+                onColophoneClick={onColophoneClick}
+                className="bg-surface-secondary"
+              />
             </div>
           </div>
         </div>

@@ -85,6 +85,10 @@ function App() {
         projectId={activeProject}
         onClose={closeProject}
         onProjectOpen={openProject}
+        onColophoneClick={() => {
+          closeProject()
+          openColophone()
+        }}
       />
     </div>
   )

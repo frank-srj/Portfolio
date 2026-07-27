@@ -38,7 +38,7 @@ function Body({ children }) {
 
 function Colophone() {
   return (
-    <section className="flex w-full flex-col items-center justify-center gap-8 bg-surface-secondary px-6 py-28">
+    <section className="flex w-full flex-1 flex-col items-center justify-start gap-8 bg-surface-secondary px-6 py-28">
       <div className={`flex flex-col items-start gap-1 ${column}`}>
         <h1 className="w-full font-sans text-[28px] font-medium leading-9 tracking-[-0.5px] text-text-primary phone:text-[24px] phone:leading-8 phone:tracking-[-0.48px]">
           Colophone
