@@ -1402,7 +1402,7 @@ function ProjectSheet({ open, onClose, projectId, onProjectOpen, onColophoneClic
               {/* Project thumbnail — full-bleed banner with the close icon top-right.
                  Height scales with viewport so narrow sheets stay landscape-ish
                  instead of squaring up and over-cropping the wide banner. */}
-              <div className="relative flex h-[clamp(160px,15vw+80px,280px)] w-full shrink-0 flex-col items-end overflow-clip rounded-t-3xl p-8 phone:h-[537px] phone:p-4">
+              <div className="relative flex h-[clamp(160px,15vw+80px,280px)] w-full shrink-0 flex-col items-end overflow-clip rounded-t-3xl p-8 phone:h-[400px] phone:p-4">
                 <img
                   src={
                     isPhone && project.bannerMobile
