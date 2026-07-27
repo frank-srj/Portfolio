@@ -41,7 +41,7 @@ import orbitDeliverable2 from '../assets/case-studies/orbit/Orbit_Deliverable_2.
 import orbitDeliverable3 from '../assets/case-studies/orbit/Orbit_Deliverable_3.webp'
 import orbitDeliverable4 from '../assets/case-studies/orbit/Orbit_Deliverable_4.webp'
 
-import urbanBanner from '../assets/case-studies/urban-projective/Urban_Thumbnail.png'
+import urbanBanner from '../assets/case-studies/urban-projective/Urban_Thumbnail.webp'
 import dualLayerResponse from '../assets/case-studies/urban-projective/dual-layer-response.png'
 import mapLayers from '../assets/case-studies/urban-projective/map-layers.png'
 import urbanLogo from '../assets/case-studies/urban-projective/logo.png'
