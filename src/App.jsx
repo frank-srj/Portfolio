@@ -5,8 +5,12 @@ import CaseStudies from './components/CaseStudies'
 import Footer from './components/Footer'
 import ContactSheet from './components/contactsheet'
 import ProjectSheet from './components/projectsheet'
+import HomeMobile from './components/HomeMobile'
+import { useIsPhone } from './hooks/useMediaQuery'
 
 function App() {
+  const isPhone = useIsPhone()
+
   const [contactOpen, setContactOpen] = useState(false)
   const openContact = () => setContactOpen(true)
   const closeContact = () => setContactOpen(false)
@@ -23,7 +27,7 @@ function App() {
   }
 
   return (
-    <div className="relative min-h-screen min-w-[var(--page-min-width)] bg-surface-primary text-text-primary">
+    <div className="relative min-h-screen w-full max-w-full overflow-x-clip bg-surface-primary text-text-primary">
       <Navbar
         onContactClick={openContact}
         onHomeClick={goHome}
@@ -38,9 +42,18 @@ function App() {
             : 'translate-y-0 opacity-100'
         }`}
       >
-        <Hero onContactClick={openContact} />
-        <CaseStudies onProjectOpen={openProject} />
-        <Footer />
+        {isPhone ? (
+          <HomeMobile
+            onContactClick={openContact}
+            onProjectOpen={openProject}
+          />
+        ) : (
+          <>
+            <Hero onContactClick={openContact} />
+            <CaseStudies onProjectOpen={openProject} />
+            <Footer />
+          </>
+        )}
       </div>
       <ContactSheet open={contactOpen} onClose={closeContact} />
       <ProjectSheet

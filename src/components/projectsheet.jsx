@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
 } from 'react'
+import { useIsPhone } from '../hooks/useMediaQuery'
 import closeIcon from '../assets/contact/close.svg'
 import closeIconNeutral from '../assets/contact/close-neutral.svg'
 import productIcon from '../assets/case-studies/icons/product.svg'
@@ -16,29 +17,29 @@ import urbanProjective from '../assets/case-studies/urban-projective.png'
 import orbitCard from '../assets/case-studies/orbit.png'
 import figmaCard from '../assets/case-studies/figma-sustainable-mode.png'
 
-import figmaBanner from '../assets/case-studies/figma-sustainable-mode/Figma_Thumbnail.webp'
+import figmaBanner from '../assets/case-studies/figma-sustainable-mode/Figma-Thumbnail.webp'
 import carbonCalculator from '../assets/case-studies/figma-sustainable-mode/carbon-calculator.png'
 import greenSoftware from '../assets/case-studies/figma-sustainable-mode/green-software.png'
-import conceptMode from '../assets/case-studies/figma-sustainable-mode/concept-mode.png'
-import capabilityMeasure from '../assets/case-studies/figma-sustainable-mode/capability-measure.png'
-import capabilityGuide from '../assets/case-studies/figma-sustainable-mode/capability-guide.png'
-import capabilityEducate from '../assets/case-studies/figma-sustainable-mode/capability-educate.png'
-import userFlow from '../assets/case-studies/figma-sustainable-mode/user-flow.png'
-import contextualBanners from '../assets/case-studies/figma-sustainable-mode/contextual-banners.png'
-import figmaDeliverable1 from '../assets/case-studies/figma-sustainable-mode/deliverable-1.png'
-import figmaDeliverable2 from '../assets/case-studies/figma-sustainable-mode/deliverable-2.png'
-import figmaDeliverable3 from '../assets/case-studies/figma-sustainable-mode/deliverable-3.png'
+import conceptMode from '../assets/case-studies/figma-sustainable-mode/concept-mode.webp'
+import capabilityMeasure from '../assets/case-studies/figma-sustainable-mode/capability-measure.webp'
+import capabilityGuide from '../assets/case-studies/figma-sustainable-mode/capability-guide.webp'
+import capabilityEducate from '../assets/case-studies/figma-sustainable-mode/capability-educate.webp'
+import userFlow from '../assets/case-studies/figma-sustainable-mode/user-flow.webp'
+import contextualBanners from '../assets/case-studies/figma-sustainable-mode/contextual-banner.webp'
+import figmaDeliverable1 from '../assets/case-studies/figma-sustainable-mode/deliverable-1.webp'
+import figmaDeliverable2 from '../assets/case-studies/figma-sustainable-mode/deliverable-2.webp'
+import figmaDeliverable3 from '../assets/case-studies/figma-sustainable-mode/deliverable-3.webp'
 
 import orbitBanner from '../assets/case-studies/orbit/Orbit_Thumbnail.png'
-import marketApps from '../assets/case-studies/orbit/market-apps.png'
-import stickyNotes from '../assets/case-studies/orbit/sticky-notes.png'
-import orbitSearch from '../assets/case-studies/orbit/orbit-search.png'
-import intentions from '../assets/case-studies/orbit/intentions.png'
-import spiderWeb from '../assets/case-studies/orbit/spider-web.png'
-import orbitDeliverable1 from '../assets/case-studies/orbit/deliverable-1.png'
-import orbitDeliverable2 from '../assets/case-studies/orbit/deliverable-2.png'
-import orbitDeliverable3 from '../assets/case-studies/orbit/deliverable-3.png'
-import orbitDeliverable4 from '../assets/case-studies/orbit/deliverable-4.png'
+import marketApps from '../assets/case-studies/orbit/market-apps.webp'
+import stickyNotes from '../assets/case-studies/orbit/sticky-notes.webp'
+import orbitSearch from '../assets/case-studies/orbit/orbit-search.webp'
+import intentions from '../assets/case-studies/orbit/Intentions.webp'
+import spiderWeb from '../assets/case-studies/orbit/spider-web.webp'
+import orbitDeliverable1 from '../assets/case-studies/orbit/Orbit_Deliverable_1.webp'
+import orbitDeliverable2 from '../assets/case-studies/orbit/Orbit_Deliverable_2.webp'
+import orbitDeliverable3 from '../assets/case-studies/orbit/Orbit_Deliverable_3.webp'
+import orbitDeliverable4 from '../assets/case-studies/orbit/Orbit_Deliverable_4.webp'
 
 import urbanBanner from '../assets/case-studies/urban-projective/Urban_Thumbnail.png'
 import dualLayerResponse from '../assets/case-studies/urban-projective/dual-layer-response.png'
@@ -274,10 +275,15 @@ function ImageLightbox({ src, caption, onClose }) {
   )
 }
 
-/** Click-to-enlarge image — no hover animation, just a zoom cursor. */
+/** Click-to-enlarge image on desktop — plain image on phone (no lightbox). */
 function ZoomableImage({ src, caption, alt = '', className }) {
   const openLightbox = useOpenLightbox()
+  const isPhone = useIsPhone()
   const open = () => openLightbox?.({ src, caption })
+
+  if (isPhone) {
+    return <img src={src} alt={alt} className={className} />
+  }
 
   return (
     <img
@@ -373,7 +379,7 @@ function CaseStudyNav() {
               setActiveTarget(item.target)
               scrollToSection(item.target)
             }}
-            className={`font-sans text-lg font-medium leading-7 tracking-[-0.2px] transition-colors ${
+            className={`font-sans text-lg font-normal leading-7 tracking-[-0.2px] transition-colors phone:hidden ${
               isActive
                 ? 'text-text-primary'
                 : 'text-text-secondary hover:text-text-primary'
@@ -386,9 +392,9 @@ function CaseStudyNav() {
       <button
         type="button"
         onClick={() => scrollToSection('deliverables')}
-        className="flex flex-col items-start justify-end gap-1 rounded-md bg-neutral-100 px-3 py-2 transition-colors hover:bg-neutral-90"
+        className="flex flex-col items-start justify-end gap-1 rounded-md bg-neutral-100 px-3 py-2 transition-colors hover:bg-neutral-90 phone:w-full phone:items-center phone:px-3 phone:py-3"
       >
-        <span className="font-sans text-lg font-medium leading-7 tracking-[-0.2px] text-text-invert">
+        <span className="font-sans text-lg font-normal leading-7 tracking-[-0.2px] text-text-invert">
           Jump to Deliverables
         </span>
       </button>
@@ -421,7 +427,7 @@ function SectionLabel({ children }) {
 
 function Heading({ children }) {
   return (
-    <h2 className="w-full font-sans text-[28px] font-medium leading-9 tracking-[-0.5px] text-text-primary">
+    <h2 className="w-full font-sans text-[28px] font-medium leading-9 tracking-[-0.5px] text-text-primary phone:text-[24px] phone:leading-8 phone:tracking-[-0.48px]">
       {children}
     </h2>
   )
@@ -1075,6 +1081,18 @@ function ArrowIcon() {
   )
 }
 
+function ProjectYearTag({ tag }) {
+  return (
+    <div className="flex flex-wrap content-start items-start gap-1">
+      <div className="flex items-center justify-center gap-1.5 rounded-full border border-border-primary px-2 pb-1.5 pt-2">
+        <span className="whitespace-nowrap font-mono text-[15px] font-medium leading-[14px] tracking-[-0.5px] text-text-secondary">
+          {tag}
+        </span>
+      </div>
+    </div>
+  )
+}
+
 function OtherProjectCard({
   tag,
   title,
@@ -1108,44 +1126,43 @@ function OtherProjectCard({
             }
           : undefined
       }
-      className={`group flex h-full min-w-px flex-1 flex-col items-start rounded-2xl border border-border-primary bg-surface-secondary p-3 transition-colors duration-300 ease-[cubic-bezier(0.33,0,0.2,1)] hover:bg-surface-primary ${
+      className={`group flex h-full min-w-px flex-1 flex-col items-start rounded-2xl border border-border-primary bg-surface-secondary p-3 transition-colors duration-300 ease-[cubic-bezier(0.33,0,0.2,1)] hover:bg-surface-primary phone:bg-surface-primary phone:hover:bg-surface-primary ${
         interactive ? 'cursor-pointer' : ''
       }`}
     >
       <div className="flex size-full flex-col items-start gap-3">
-        <div className="aspect-[678/378] w-full shrink-0 overflow-hidden rounded-xl">
+        <div className="aspect-[678/378] w-full shrink-0 overflow-hidden rounded-xl phone:aspect-[683/378]">
           <img src={image} alt="" className="size-full object-cover" />
         </div>
 
         <div className="flex w-full min-w-[299px] flex-1 flex-col items-start gap-4">
-          {/* Year tag — same height across cards so titles align */}
-          <div className="flex flex-wrap content-start items-start gap-1">
-            <div className="flex items-center justify-center gap-1.5 rounded-full border border-border-primary px-2 pb-1.5 pt-2">
-              <span className="whitespace-nowrap font-mono text-[15px] font-medium leading-[14px] tracking-[-0.5px] text-text-secondary">
-                {tag}
-              </span>
-            </div>
+          {/* Year tag — desktop only; on phone it sits in the bottom row */}
+          <div className="phone:hidden">
+            <ProjectYearTag tag={tag} />
           </div>
 
-          {/* Title + description share a top edge across the row */}
           <div className="flex w-full flex-col items-start gap-1">
             <h3 className="w-full font-sans text-[20px] font-medium leading-7 tracking-[-0.5px] text-text-primary">
               {title}
             </h3>
-            <p className="w-full whitespace-pre-line font-sans text-[20px] font-normal leading-7 tracking-[-0.2px] text-text-primary">
+            <p className="w-full whitespace-pre-line font-sans text-[20px] font-normal leading-7 tracking-[-0.2px] text-text-primary phone:text-lg">
               {description}
             </p>
           </div>
 
-          {/* Bottom row: hover tags + arrow (always bottom-right, card p-3) */}
-          <div className="flex w-full flex-1 flex-col justify-end">
-            <div className="flex w-full items-end gap-2">
-              <div className="flex flex-wrap items-end gap-1 opacity-0 transition-opacity duration-300 ease-[cubic-bezier(0.33,0,0.2,1)] group-hover:opacity-100">
+          <div className="flex w-full flex-1 flex-col justify-end phone:flex-none">
+            <div className="flex w-full items-end gap-2 phone:items-center phone:justify-between">
+              <div className="hidden phone:block">
+                <ProjectYearTag tag={tag} />
+              </div>
+
+              <div className="flex flex-wrap items-end gap-1 opacity-0 transition-opacity duration-300 ease-[cubic-bezier(0.33,0,0.2,1)] group-hover:opacity-100 phone:hidden">
                 {categories.map((category) => (
                   <CategoryTag key={category.label} {...category} />
                 ))}
               </div>
-              <div className="ml-auto shrink-0">
+
+              <div className="ml-auto shrink-0 phone:ml-0">
                 <ArrowIcon />
               </div>
             </div>
@@ -1163,7 +1180,7 @@ function OtherProjects({ onProjectOpen }) {
     <section className="flex w-full flex-col items-center bg-surface-secondary">
       <div className="mx-auto flex w-full max-w-[1440px] flex-col items-start gap-5 px-8 pb-24 pt-16">
         <div className="flex w-full items-start px-4">
-          <h2 className="whitespace-nowrap font-sans text-[32px] font-medium leading-[42px] tracking-[-0.64px] text-text-primary">
+          <h2 className="whitespace-nowrap font-sans text-[32px] font-medium leading-[42px] tracking-[-0.64px] text-text-primary phone:text-[24px] phone:leading-8 phone:tracking-[-0.48px]">
             Other Projects
           </h2>
         </div>
@@ -1184,12 +1201,18 @@ function OtherProjects({ onProjectOpen }) {
 }
 
 function ProjectSheet({ open, onClose, projectId, onProjectOpen }) {
+  const isPhone = useIsPhone()
   // The sheet's top edge stops spacing-12 below the (sticky) navbar, so the
   // navbar stays visible and interactable above it. Measure the navbar so the
   // gap holds across breakpoints.
   const [navHeight, setNavHeight] = useState(65)
   const [lightbox, setLightbox] = useState(null)
-  const openLightbox = useCallback((payload) => setLightbox(payload), [])
+  const openLightbox = useCallback(
+    (payload) => {
+      if (!isPhone) setLightbox(payload)
+    },
+    [isPhone]
+  )
   const closeLightbox = useCallback(() => setLightbox(null), [])
   // Keep mounted through the exit so the sheet can slide down instead of vanishing.
   const [visible, setVisible] = useState(false)
@@ -1406,7 +1429,7 @@ function ProjectSheet({ open, onClose, projectId, onProjectOpen }) {
 
                   {/* Title + intro */}
                   <div className="flex w-full max-w-[1120px] items-center">
-                    <h1 className="min-w-px flex-1 font-sans text-[32px] font-medium leading-[42px] tracking-[-0.64px] text-text-primary">
+                    <h1 className="min-w-px flex-1 font-sans text-[32px] font-medium leading-[42px] tracking-[-0.64px] text-text-primary phone:text-[24px] phone:leading-8 phone:tracking-[-0.48px]">
                       {project.title}
                       <span className="text-text-secondary">{project.intro}</span>
                     </h1>
@@ -1432,11 +1455,13 @@ function ProjectSheet({ open, onClose, projectId, onProjectOpen }) {
           </div>
         </div>
 
-        <ImageLightbox
-          src={lightbox?.src}
-          caption={lightbox?.caption}
-          onClose={closeLightbox}
-        />
+        {!isPhone ? (
+          <ImageLightbox
+            src={lightbox?.src}
+            caption={lightbox?.caption}
+            onClose={closeLightbox}
+          />
+        ) : null}
       </ImageLightboxContext.Provider>
     </ProjectDataContext.Provider>
   )

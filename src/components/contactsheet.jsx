@@ -1,32 +1,180 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import frankProfile from '../assets/contact/frank-profile.jpg'
 import linkedinIcon from '../assets/contact/linkedin.svg'
 import mapPinIcon from '../assets/contact/map-pin.svg'
 import shareIcon from '../assets/contact/share.svg'
 import closeIcon from '../assets/contact/close.svg'
-import cvPdf from '../assets/CV_Frank,Stryj.pdf'
+import cvPdf from '../assets/CV_Stryj-Frank.pdf'
+import { useIsPhone } from '../hooks/useMediaQuery'
 
-function ContactSheet({ open, onClose }) {
-  // Close on Escape and lock body scroll while the sheet is open.
-  useEffect(() => {
-    if (!open) return
+const BANNER_VISIBLE_MS = 5000
+const BANNER_DISSOLVE_MS = 400
 
-    const handleKeyDown = (event) => {
-      if (event.key === 'Escape') onClose()
-    }
+function getPortfolioUrl() {
+  const envUrl = import.meta.env.VITE_SITE_URL?.replace(/\/$/, '')
+  return envUrl || window.location.origin
+}
 
-    document.addEventListener('keydown', handleKeyDown)
-    const previousOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
+async function copyPortfolioUrl() {
+  const url = getPortfolioUrl()
+  try {
+    await navigator.clipboard.writeText(url)
+  } catch {
+    const textarea = document.createElement('textarea')
+    textarea.value = url
+    textarea.setAttribute('readonly', '')
+    textarea.style.position = 'fixed'
+    textarea.style.opacity = '0'
+    document.body.appendChild(textarea)
+    textarea.select()
+    document.execCommand('copy')
+    document.body.removeChild(textarea)
+  }
+}
 
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown)
-      document.body.style.overflow = previousOverflow
-    }
-  }, [open, onClose])
+function ShareBanner({ dissolving }) {
+  return (
+    <div
+      role="status"
+      aria-live="polite"
+      className={`pointer-events-none fixed bottom-6 right-6 z-[70] overflow-clip rounded-xl bg-white/50 p-3 shadow-[0px_7px_4px_0px_rgba(0,0,0,0.02),0px_3px_3px_0px_rgba(0,0,0,0.03),0px_1px_2px_0px_rgba(0,0,0,0.03)] ${
+        dissolving ? 'animate-banner-dissolve' : 'animate-banner-float-in'
+      }`}
+    >
+      <p className="whitespace-nowrap font-sans text-[15px] font-normal leading-[22px] text-text-primary">
+        Portfolio Link was copied
+      </p>
+    </div>
+  )
+}
 
-  if (!open) return null
+// Shared by both layouts so the phone and desktop sheets always read the same.
+const copy = {
+  heading: 'Hello, I’m Frank!',
+  intro:
+    'I’m a German product designer based in Amsterdam. I’m open to new work, so if you’re working on something exciting and looking for a designer to join your team, I’d love to connect!',
+  aboutLabel: 'About me',
+  about:
+    'I enjoy exploring unfamiliar territory and navigating complexity. I combine analytical thinking with creativity to design experiences that feel intuitive, purposeful, and refined. Above all, I think deeply about the people behind the product, the details that shape experiences, and the possibilities that technology can create for the future.',
+  funFactLabel: 'A little fun fact',
+  funFact:
+    'At 16, I built Snapchat geofilters so my friends and I could use them in our hometown. That was the first time I made something simply because I wanted it to exist and seeing people actually use it brought me a lot of joy. That’s still the case today.',
+}
 
+/* Figma "Contact-Mobile": fills the screen, close above the stack, cards at
+   4px side margins, and the whole stack scrolls as one column. */
+function MobileSheet({ onClose }) {
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Contact Frank"
+      className="animate-fade-in fixed inset-0 z-[60] flex flex-col gap-2.5 overflow-hidden bg-neutral-100/60 px-1 pt-3"
+      onClick={onClose}
+    >
+      <div className="flex w-full shrink-0 justify-end pr-3">
+        <button
+          type="button"
+          aria-label="Close"
+          onClick={onClose}
+          className="block h-[48.97px] w-[var(--contact-close-width)] shrink-0 cursor-pointer"
+        >
+          <img src={closeIcon} alt="" className="size-full" />
+        </button>
+      </div>
+
+      <div
+        className="animate-slide-up flex min-h-0 w-full flex-1 flex-col gap-1 overflow-y-auto rounded-xl pb-1"
+        onClick={(event) => event.stopPropagation()}
+      >
+        {/* Contact card */}
+        <div className="flex w-full shrink-0 flex-col overflow-clip rounded-xl bg-surface-primary">
+          <div className="h-[317px] w-full shrink-0 overflow-hidden">
+            <img
+              src={frankProfile}
+              alt="Frank"
+              className="size-full object-cover object-[50%_60%]"
+            />
+          </div>
+
+          <div className="flex w-full flex-col items-end gap-6 px-6 py-8">
+            <div className="flex w-full flex-col gap-2">
+              <h2 className="w-full font-sans text-[24px] font-medium leading-8 tracking-[-0.48px] text-text-primary">
+                {copy.heading}
+              </h2>
+              <p className="w-full font-sans text-lg font-normal leading-7 tracking-[-0.2px] text-text-secondary">
+                {copy.intro}
+              </p>
+            </div>
+
+            <div className="flex items-center gap-1">
+              <a
+                href="https://www.linkedin.com/in/frankstryj/"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="LinkedIn"
+                className="flex h-14 w-[58px] items-center justify-center rounded-full bg-surface-secondary transition-colors active:bg-surface-tertiary"
+              >
+                <img src={linkedinIcon} alt="" className="size-5" />
+              </a>
+              <a
+                href={cvPdf}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Curriculum Vitae"
+                className="flex h-14 w-[58px] items-center justify-center rounded-full bg-surface-secondary font-sans text-xl font-bold tracking-[-0.6px] text-text-primary transition-colors active:bg-surface-tertiary"
+              >
+                CV
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* Contact options */}
+        <div className="flex w-full shrink-0 items-stretch gap-1">
+          <a
+            href="tel:+491794171933"
+            className="flex min-w-px flex-1 items-center justify-center overflow-clip rounded-xl bg-brand px-3 py-7 transition-opacity active:opacity-90"
+          >
+            <span className="whitespace-nowrap font-sans text-lg leading-7 tracking-[-0.2px] text-text-invert">
+              (+49) 179 4171933
+            </span>
+          </a>
+          <a
+            href="mailto:frank.stryj@gmail.com"
+            className="flex min-w-px flex-1 items-center justify-center overflow-clip rounded-xl bg-surface-primary px-3 py-7 transition-colors active:bg-surface-secondary"
+          >
+            <span className="whitespace-nowrap font-sans text-lg leading-7 tracking-[-0.2px] text-text-primary">
+              frank.stryj@gmail.com
+            </span>
+          </a>
+        </div>
+
+        {/* About */}
+        <div className="flex w-full shrink-0 flex-col gap-8 rounded-xl bg-surface-primary px-6 py-8">
+          <div className="flex w-full flex-col gap-1">
+            <p className="w-full font-sans text-lg font-medium leading-7 tracking-[-0.2px] text-text-secondary">
+              {copy.aboutLabel}
+            </p>
+            <p className="w-full font-sans text-lg font-normal leading-7 tracking-[-0.2px] text-text-primary">
+              {copy.about}
+            </p>
+          </div>
+          <div className="flex w-full flex-col gap-1">
+            <p className="w-full font-sans text-lg font-medium leading-7 tracking-[-0.2px] text-text-secondary">
+              {copy.funFactLabel}
+            </p>
+            <p className="w-full font-sans text-lg font-normal leading-7 tracking-[-0.2px] text-text-primary">
+              {copy.funFact}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function DesktopSheet({ onClose, onShare }) {
   return (
     <div
       role="dialog"
@@ -65,7 +213,7 @@ function ContactSheet({ open, onClose }) {
                   <div className="flex w-full flex-col items-start gap-6">
                     <div className="flex w-full items-start justify-between">
                       <h2 className="shrink-0 whitespace-nowrap font-sans text-[28px] font-medium leading-9 tracking-[-0.5px] text-text-primary">
-                        Hello, I&rsquo;m Frank!
+                        {copy.heading}
                       </h2>
                       <div className="flex shrink-0 items-center justify-center gap-1.5 self-stretch rounded-full border border-brand pb-1.5 pl-3 pr-4 pt-2">
                         <img
@@ -79,10 +227,7 @@ function ContactSheet({ open, onClose }) {
                       </div>
                     </div>
                     <p className="w-full font-sans text-lg font-normal leading-7 tracking-[-0.2px] text-text-secondary">
-                      I&rsquo;m a German product designer based in Amsterdam.
-                      I&rsquo;m open to new work, so if you&rsquo;re working on
-                      something exciting and looking for a designer to join your
-                      team, I&rsquo;d love to connect!
+                      {copy.intro}
                     </p>
                   </div>
 
@@ -110,6 +255,7 @@ function ContactSheet({ open, onClose }) {
                       <button
                         type="button"
                         aria-label="Share"
+                        onClick={onShare}
                         className="flex h-14 w-[58px] items-center justify-center rounded-full bg-surface-secondary transition-colors hover:bg-surface-tertiary"
                       >
                         <img src={shareIcon} alt="" className="size-6" />
@@ -144,25 +290,18 @@ function ContactSheet({ open, onClose }) {
             <div className="flex w-[var(--contact-content-width)] shrink-0 flex-col items-start justify-between gap-8 rounded-xl bg-surface-primary px-10 py-8 min-[1064px]:w-[519px] min-[1064px]:gap-0 min-[1064px]:self-stretch">
               <div className="flex w-full flex-col items-start gap-1">
                 <p className="w-full font-sans text-lg font-medium leading-7 tracking-[-0.2px] text-text-secondary">
-                  About me
+                  {copy.aboutLabel}
                 </p>
                 <p className="w-full font-sans text-lg font-normal leading-7 tracking-[-0.2px] text-text-primary">
-                  I enjoy exploring unfamiliar territory and navigating complexity. I combine
-                  analytical thinking with creativity to design experiences that feel
-                  intuitive, purposeful, and refined. Above all, I think deeply about
-                  the people behind the product, the details that shape experiences,
-                  and the possibilities that technology can create for the future.
+                  {copy.about}
                 </p>
               </div>
               <div className="flex w-full flex-col items-start gap-1">
                 <p className="w-full font-sans text-lg font-medium leading-7 tracking-[-0.2px] text-text-secondary">
-                  A little fun fact
+                  {copy.funFactLabel}
                 </p>
                 <p className="w-full font-sans text-lg font-normal leading-7 tracking-[-0.2px] text-text-primary">
-                  At 16, I built Snapchat geofilters so my friends and I could use them
-                  in our hometown. That was the first time I made something simply
-                  because I wanted it to exist and seeing people actually use it brought
-                  me a lot of joy. That&rsquo;s still the case today.
+                  {copy.funFact}
                 </p>
               </div>
             </div>
@@ -180,6 +319,73 @@ function ContactSheet({ open, onClose }) {
         </div>
       </div>
     </div>
+  )
+}
+
+function ContactSheet({ open, onClose }) {
+  const isPhone = useIsPhone()
+  const [bannerPhase, setBannerPhase] = useState(null)
+  const visibleTimerRef = useRef(null)
+  const dissolveTimerRef = useRef(null)
+
+  const clearBannerTimers = useCallback(() => {
+    clearTimeout(visibleTimerRef.current)
+    clearTimeout(dissolveTimerRef.current)
+  }, [])
+
+  const dismissBanner = useCallback(() => {
+    clearBannerTimers()
+    setBannerPhase(null)
+  }, [clearBannerTimers])
+
+  const handleShare = useCallback(async () => {
+    await copyPortfolioUrl()
+    clearBannerTimers()
+    setBannerPhase('visible')
+
+    visibleTimerRef.current = setTimeout(() => {
+      setBannerPhase('dissolving')
+      dissolveTimerRef.current = setTimeout(() => {
+        setBannerPhase(null)
+      }, BANNER_DISSOLVE_MS)
+    }, BANNER_VISIBLE_MS)
+  }, [clearBannerTimers])
+
+  // Close on Escape and lock body scroll while the sheet is open.
+  useEffect(() => {
+    if (!open) return
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') onClose()
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+      document.body.style.overflow = previousOverflow
+    }
+  }, [open, onClose])
+
+  useEffect(() => {
+    if (!open) dismissBanner()
+  }, [open, dismissBanner])
+
+  useEffect(() => () => clearBannerTimers(), [clearBannerTimers])
+
+  if (!open) return null
+
+  return (
+    <>
+      {bannerPhase && <ShareBanner dissolving={bannerPhase === 'dissolving'} />}
+      {isPhone ? (
+        <MobileSheet onClose={onClose} />
+      ) : (
+        <DesktopSheet onClose={onClose} onShare={handleShare} />
+      )}
+    </>
   )
 }
 

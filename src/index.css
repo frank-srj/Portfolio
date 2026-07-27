@@ -1,5 +1,19 @@
 @import "tailwindcss";
 
+/*
+  Input-capability variants. These key off the pointing device, not the viewport,
+  so a desktop window narrowed to phone width still counts as `mouse` and keeps
+  its hover states, while an actual phone gets the `touch` treatment.
+*/
+@custom-variant touch (@media (hover: none) and (pointer: coarse));
+@custom-variant mouse (@media (hover: hover) and (pointer: fine));
+
+/*
+  Phone-sized touch device — the CSS twin of useIsPhone() in
+  src/hooks/useMediaQuery.js. Keep the two definitions in sync.
+*/
+@custom-variant phone (@media (hover: none) and (pointer: coarse) and ((max-width: 599px) or (max-height: 499px)));
+
 @font-face {
   font-family: "Geist";
   src: url("./assets/fonts/Geist-Regular.woff2") format("woff2");
@@ -102,7 +116,7 @@
 }
 
 /*
-  Keep the navbar/hero rail (Work/Play/Resume + resume list) aligned with the
+  Keep the navbar/hero rail (Work/Resume + resume list) aligned with the
   case-study content column — continuously, so it never jumps.
 
   --case-pad mirrors the single-column card pad math (100vw card, padding
@@ -117,7 +131,8 @@
 */
 :root {
   --case-image-base: 683px;
-  --case-card-width: calc(100vw - 2 * var(--spacing-3));
+  /* svw tracks the visible viewport without scrollbar overflow on narrow screens */
+  --case-card-width: calc(100svw - 2 * var(--spacing-3));
   --case-pad: clamp(
     var(--spacing-3),
     calc(
@@ -137,13 +152,34 @@
   --contact-wrapper-width: calc(
     var(--contact-content-width) + var(--spacing-1) + var(--contact-close-width)
   );
-  --page-min-width: 548px;
+  /* Minimum frame width on desktop; below this the viewport scrolls horizontally
+     rather than compressing layout. Kept in sync with contact sheet sizing. */
+  --page-min-width: 435px;
 }
 
 html,
 body,
 #root {
-  min-width: var(--page-min-width);
+  width: 100%;
+  max-width: 100%;
+}
+
+/*
+  The horizontal clamp lives on #root and must stay off html/body. The browser
+  only propagates body's overflow to the viewport while the root element's own
+  overflow is `visible`, and the sheets depend on that propagation: they lock
+  the page with `document.body.style.overflow = 'hidden'` while open. With
+  overflow set on html, that lock stops reaching the viewport, so the page keeps
+  scrolling behind an open sheet and takes the sticky navbar with it.
+*/
+#root {
+  overflow-x: clip;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #root {
+    min-width: var(--page-min-width);
+  }
 }
 
 @keyframes fade-in {
@@ -244,4 +280,32 @@ body,
 .animate-sheet-bg-dissolve {
   /* Overlaps the settle so settle + dissolve read as one gesture */
   animation: sheet-bg-dissolve 1.05s cubic-bezier(0.33, 0, 0.2, 1) 0.25s forwards;
+}
+
+@keyframes banner-float-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes banner-dissolve {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.animate-banner-float-in {
+  animation: banner-float-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-banner-dissolve {
+  animation: banner-dissolve 0.4s ease-out forwards;
 }

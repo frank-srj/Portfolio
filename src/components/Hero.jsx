@@ -1,38 +1,6 @@
 import arrowUpRight from '../assets/arrow-up-right.svg'
 import frankArrowNew from '../assets/frank-arrow-new.svg'
-
-const jobs = [
-  {
-    year: '2026',
-    company: 'UseLess',
-    url: 'https://use-less.app/',
-    title: 'Freelance App & Brand Design',
-  },
-  {
-    year: '2025',
-    company: 'Bosch Digital',
-    url: 'https://www.bosch-digital.com/',
-    title: 'Product Designer (Part-Time)',
-  },
-  {
-    year: '2024',
-    company: 'Bosch Digital',
-    url: 'https://www.bosch-digital.com/',
-    title: 'Product Design Intern',
-  },
-  {
-    year: '2023',
-    company: 'Volkswagen Group',
-    url: 'https://www.volkswagen-group.com/en',
-    title: 'UI/UX Designer (Part-Time)',
-  },
-  {
-    year: '2022',
-    company: 'Audi Interaction GmbH',
-    url: 'https://www.audiinteraction.com/de/',
-    title: 'User Researcher (Part-Time)',
-  },
-]
+import { jobs } from '../data/resume'
 
 function Claim({ onContactClick }) {
   return (
@@ -84,7 +52,7 @@ function Resume({ items }) {
             {/* Job */}
             <div className="flex min-w-px flex-1 flex-wrap content-start items-start">
               {/* Company — same button/hover treatment as the navbar buttons */}
-              <div className="flex min-w-[210px] items-center gap-1">
+              <div className="flex min-w-0 items-center gap-1 min-[420px]:min-w-[210px]">
                 {job.url ? (
                   <a
                     href={job.url}
@@ -107,7 +75,7 @@ function Resume({ items }) {
               </div>
 
               {/* Job title */}
-              <div className="flex min-w-[210px] flex-1 items-center justify-center">
+              <div className="flex min-w-0 flex-1 items-center justify-center min-[420px]:min-w-[210px]">
                 <span className="min-w-px flex-1 font-sans text-[15px] leading-[22px] text-text-secondary">
                   {job.title}
                 </span>

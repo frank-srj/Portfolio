@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react"
-import cvPdf from "../assets/CV_Frank,Stryj.pdf"
+import cvPdf from "../assets/CV_Stryj-Frank.pdf"
 
 const navLinks = [
   { label: "Work", active: true },
-  { label: "Play", active: false },
+  // Play site not live yet — set visible: true when ready.
+  { label: "Play", active: false, visible: false },
   { label: "Resume", active: false, href: cvPdf, external: true },
 ]
+
+const visibleNavLinks = navLinks.filter((link) => link.visible !== false)
 
 function NavLink({ link, onClick }) {
   return (
@@ -129,7 +132,7 @@ function Navbar({ onContactClick, onHomeClick, contactOpen = false }) {
             }`}
           >
             <div className="flex flex-col items-start justify-center gap-3">
-              {navLinks.map((link) => (
+              {visibleNavLinks.map((link) => (
                 <NavLink key={link.label} link={link} onClick={closeMenu} />
               ))}
             </div>
@@ -159,7 +162,7 @@ function Navbar({ onContactClick, onHomeClick, contactOpen = false }) {
         {/* Nav — links share the resume/content left edge; Contact fills to the top-right corner */}
         <div className="flex w-[calc(var(--width-rail)+var(--rail-margin-end))] shrink-0 items-center justify-between">
           <div className="flex items-center gap-3">
-            {navLinks.map((link) => (
+            {visibleNavLinks.map((link) => (
               <NavLink key={link.label} link={link} />
             ))}
           </div>
