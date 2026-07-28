@@ -14,9 +14,9 @@ import closeIconNeutral from '../assets/contact/close-neutral.svg'
 import productIcon from '../assets/case-studies/icons/product.svg'
 import designSystemIcon from '../assets/case-studies/icons/design-system.svg'
 import brandIcon from '../assets/case-studies/icons/brand.svg'
-import urbanProjective from '../assets/case-studies/urban-projective.png'
-import orbitCard from '../assets/case-studies/orbit.png'
-import figmaCard from '../assets/case-studies/figma-sustainable-mode.png'
+import urbanProjective from '../assets/case-studies/urban-projective/Urban-Thumbnail-Home.webp'
+import orbitCard from '../assets/case-studies/orbit/Orbit_Thumbnail.webp'
+import figmaCard from '../assets/case-studies/figma-sustainable-mode/Figma-Thumbnail_home.webp'
 
 import figmaBanner from '../assets/case-studies/figma-sustainable-mode/Figma-Thumbnail.webp'
 import figmaBannerMobile from '../assets/case-studies/figma-sustainable-mode/Figma_Thumbnail_Mobil.webp'
@@ -43,14 +43,14 @@ import orbitDeliverable2 from '../assets/case-studies/orbit/Orbit_Deliverable_2.
 import orbitDeliverable3 from '../assets/case-studies/orbit/Orbit_Deliverable_3.webp'
 import orbitDeliverable4 from '../assets/case-studies/orbit/Orbit_Deliverable_4.webp'
 
-import urbanBanner from '../assets/case-studies/urban-projective/Urban_Thumbnail.webp'
+import urbanBanner from '../assets/case-studies/urban-projective/Urban_Thumbnail_low.webp'
 import urbanBannerMobile from '../assets/case-studies/urban-projective/Urban_Thumbnail_mobil.webp'
-import dualLayerResponse from '../assets/case-studies/urban-projective/dual-layer-response.png'
-import mapLayers from '../assets/case-studies/urban-projective/map-layers.png'
+import dualLayerResponse from '../assets/case-studies/urban-projective/dual-layer-response.webp'
+import mapLayers from '../assets/case-studies/urban-projective/map-layers.webp'
 import urbanLogo from '../assets/case-studies/urban-projective/logo.png'
-import urbanMonitor from '../assets/case-studies/urban-projective/monitor.png'
+import urbanMonitor from '../assets/case-studies/urban-projective/monitor.webp'
 import urbanTypography from '../assets/case-studies/urban-projective/typography.png'
-import urbanStackedWindows from '../assets/case-studies/urban-projective/stacked-windows.png'
+import urbanStackedWindows from '../assets/case-studies/urban-projective/stacked-windows.webp'
 
 const defaultCategories = [
   { label: 'Product', icon: productIcon },
@@ -292,7 +292,16 @@ function ZoomableImage({ src, caption, alt = '', className }) {
   const open = () => openLightbox?.({ src, caption })
 
   if (isPhone) {
-    return <img src={src} alt={alt} className={className} />
+    return (
+      <img
+        src={src}
+        alt={alt}
+        className={className}
+        loading="lazy"
+        decoding="async"
+        fetchPriority="low"
+      />
+    )
   }
 
   return (
@@ -300,6 +309,9 @@ function ZoomableImage({ src, caption, alt = '', className }) {
       src={src}
       alt={alt}
       className={`cursor-zoom-in ${className}`}
+      loading="lazy"
+      decoding="async"
+      fetchPriority="low"
       role="button"
       tabIndex={0}
       aria-label="View larger image"
@@ -1133,7 +1145,14 @@ function OtherProjectCard({
     >
       <div className="flex size-full flex-col items-start gap-3">
         <div className="aspect-[678/378] w-full shrink-0 overflow-hidden rounded-xl phone:aspect-[683/378]">
-          <img src={image} alt="" className="size-full object-cover" />
+          <img
+            src={image}
+            alt=""
+            className="size-full object-cover"
+            loading="lazy"
+            decoding="async"
+            fetchPriority="low"
+          />
         </div>
 
         <div className="flex w-full min-w-[299px] flex-1 flex-col items-start gap-4">
@@ -1378,6 +1397,9 @@ function ProjectSheet({ open, onClose, projectId, onProjectOpen, onColophoneClic
                       }
                       alt=""
                       className={`pointer-events-none absolute inset-0 size-full ${backgroundProject.bannerClassName}`}
+                      loading="eager"
+                      decoding="async"
+                      fetchPriority="high"
                     />
                   </div>
                   <div className="h-full w-full bg-surface-primary" />
@@ -1411,6 +1433,9 @@ function ProjectSheet({ open, onClose, projectId, onProjectOpen, onColophoneClic
                   }
                   alt=""
                   className={`pointer-events-none absolute inset-0 size-full ${project.bannerClassName}`}
+                  loading="eager"
+                  decoding="async"
+                  fetchPriority="high"
                 />
                 <button
                   type="button"

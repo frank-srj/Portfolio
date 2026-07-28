@@ -87,7 +87,15 @@ function Header({ onContactClick }) {
   )
 }
 
-function CaseStudyCard({ tag, title, description, image, disabled, onOpen }) {
+function CaseStudyCard({
+  tag,
+  title,
+  description,
+  image,
+  disabled,
+  onOpen,
+  priority = false,
+}) {
   const interactive = !disabled && typeof onOpen === 'function'
 
   return (
@@ -110,7 +118,14 @@ function CaseStudyCard({ tag, title, description, image, disabled, onOpen }) {
       } ${interactive ? 'cursor-pointer active:bg-surface-secondary' : ''}`}
     >
       <div className="aspect-[683/378] w-full overflow-hidden rounded-xl">
-        <img src={image} alt="" className="size-full object-cover" />
+        <img
+          src={image}
+          alt=""
+          className="size-full object-cover"
+          loading={priority ? 'eager' : 'lazy'}
+          decoding="async"
+          fetchPriority={priority ? 'high' : 'low'}
+        />
       </div>
 
       <div className="flex w-full flex-col gap-4">
@@ -156,6 +171,7 @@ function CaseStudyList({ onProjectOpen }) {
         <CaseStudyCard
           key={caseStudy.title}
           {...caseStudy}
+          priority={Boolean(caseStudy.id)}
           onOpen={caseStudy.id ? () => onProjectOpen?.(caseStudy.id) : undefined}
         />
       ))}

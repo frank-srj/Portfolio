@@ -12,7 +12,16 @@ function CategoryTag({ label, icon }) {
   )
 }
 
-function CaseStudyCard({ tag, title, description, image, categories, disabled, onOpen }) {
+function CaseStudyCard({
+  tag,
+  title,
+  description,
+  image,
+  categories,
+  disabled,
+  onOpen,
+  priority = false,
+}) {
   // Layout math (resolved against the card’s outer width via 100cqw):
   //
   // Fixed block = image-base (683) + spacing-6 + content-min (531 = hover
@@ -79,6 +88,9 @@ function CaseStudyCard({ tag, title, description, image, categories, disabled, o
               src={image}
               alt=""
               className="size-full object-cover"
+              loading={priority ? 'eager' : 'lazy'}
+              decoding="async"
+              fetchPriority={priority ? 'high' : 'low'}
             />
           </div>
 
@@ -142,6 +154,7 @@ function CaseStudies({ onProjectOpen }) {
           <CaseStudyCard
             key={caseStudy.title}
             {...caseStudy}
+            priority={Boolean(caseStudy.id)}
             onOpen={
               caseStudy.id ? () => onProjectOpen?.(caseStudy.id) : undefined
             }

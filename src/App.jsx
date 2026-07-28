@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import CaseStudies from './components/CaseStudies'
@@ -10,33 +10,80 @@ import ProjectSheet from './components/projectsheet'
 import HomeMobile from './components/HomeMobile'
 import { useIsPhone } from './hooks/useMediaQuery'
 
+const HOME_ROUTE = {
+  page: 'home',
+  contactOpen: false,
+  activeProject: null,
+}
+
+function normalizeRoute(state) {
+  const route = state?.portfolioRoute
+
+  if (!route) return HOME_ROUTE
+
+  return {
+    page: route.page === 'colophone' ? 'colophone' : 'home',
+    contactOpen: Boolean(route.contactOpen),
+    activeProject: route.activeProject ?? null,
+  }
+}
+
 function App() {
   const isPhone = useIsPhone()
-
-  const [contactOpen, setContactOpen] = useState(false)
-  const openContact = () => setContactOpen(true)
-  const closeContact = () => setContactOpen(false)
-
-  const [activeProject, setActiveProject] = useState(null)
-  const openProject = (projectId) => setActiveProject(projectId)
-  const closeProject = () => setActiveProject(null)
+  const [route, setRoute] = useState(() => normalizeRoute(window.history.state))
+  const { page, contactOpen, activeProject } = route
   const projectOpen = activeProject != null
 
-  const [page, setPage] = useState('home')
+  const pushRoute = useCallback((nextRoute, { scrollTop = false } = {}) => {
+    setRoute(nextRoute)
+    window.history.pushState({ portfolioRoute: nextRoute }, '')
+    if (scrollTop) window.scrollTo({ top: 0 })
+  }, [])
 
-  // Page swaps land at the top rather than inheriting the previous scroll.
-  const goTo = (nextPage) => {
-    setPage(nextPage)
-    window.scrollTo({ top: 0 })
+  useEffect(() => {
+    window.history.replaceState({ portfolioRoute: route }, '')
+  }, [])
+
+  useEffect(() => {
+    const handlePopState = (event) => {
+      setRoute(normalizeRoute(event.state))
+    }
+
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [])
+
+  const openContact = () =>
+    pushRoute(
+      { page, contactOpen: true, activeProject },
+      { scrollTop: false }
+    )
+
+  const closeContact = () => {
+    if (contactOpen) window.history.back()
+  }
+
+  const openProject = (projectId) =>
+    pushRoute(
+      { page, contactOpen: false, activeProject: projectId },
+      { scrollTop: false }
+    )
+
+  const closeProject = () => {
+    if (projectOpen) window.history.back()
   }
 
   const goHome = () => {
-    setContactOpen(false)
-    setActiveProject(null)
-    goTo('home')
+    if (page === 'home' && !contactOpen && !projectOpen) return
+
+    pushRoute(HOME_ROUTE, { scrollTop: true })
   }
 
-  const openColophone = () => goTo('colophone')
+  const openColophone = () =>
+    pushRoute(
+      { page: 'colophone', contactOpen: false, activeProject: null },
+      { scrollTop: true }
+    )
 
   return (
     <div className="relative min-h-screen w-full max-w-full overflow-x-clip bg-surface-primary text-text-primary">
@@ -85,10 +132,7 @@ function App() {
         projectId={activeProject}
         onClose={closeProject}
         onProjectOpen={openProject}
-        onColophoneClick={() => {
-          closeProject()
-          openColophone()
-        }}
+        onColophoneClick={openColophone}
       />
     </div>
   )

@@ -9,6 +9,7 @@ import { useIsPhone } from '../hooks/useMediaQuery'
 
 const BANNER_VISIBLE_MS = 5000
 const BANNER_DISSOLVE_MS = 400
+const CONTACT_EXIT_MS = 600
 
 function getPortfolioUrl() {
   const envUrl = import.meta.env.VITE_SITE_URL?.replace(/\/$/, '')
@@ -63,13 +64,15 @@ const copy = {
 
 /* Figma "Contact-Mobile": fills the screen, close above the stack, cards at
    4px side margins, and the whole stack scrolls as one column. */
-function MobileSheet({ onClose }) {
+function MobileSheet({ onClose, closing }) {
   return (
     <div
       role="dialog"
       aria-modal="true"
       aria-label="Contact Frank"
-      className="animate-fade-in fixed inset-0 z-[60] flex flex-col gap-2.5 overflow-hidden bg-neutral-100/60 px-1 pt-3"
+      className={`fixed inset-0 z-[60] flex flex-col gap-2.5 overflow-hidden bg-neutral-100/60 px-1 pt-3 ${
+        closing ? 'animate-fade-out' : 'animate-fade-in'
+      }`}
       onClick={onClose}
     >
       <div className="flex w-full shrink-0 justify-end pr-3">
@@ -94,6 +97,9 @@ function MobileSheet({ onClose }) {
               src={frankProfile}
               alt="Frank"
               className="size-full object-cover object-[50%_60%]"
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
             />
           </div>
 
@@ -174,13 +180,15 @@ function MobileSheet({ onClose }) {
   )
 }
 
-function DesktopSheet({ onClose, onShare }) {
+function DesktopSheet({ onClose, onShare, closing }) {
   return (
     <div
       role="dialog"
       aria-modal="true"
       aria-label="Contact Frank"
-      className="animate-fade-in fixed inset-0 z-[60] overflow-x-auto bg-neutral-100/60"
+      className={`fixed inset-0 z-[60] overflow-x-auto bg-neutral-100/60 ${
+        closing ? 'animate-fade-out' : 'animate-fade-in'
+      }`}
       onClick={onClose}
     >
       {/* Frame is always at least the full contact wrapper + side insets, so
@@ -189,7 +197,9 @@ function DesktopSheet({ onClose, onShare }) {
       <div className="relative h-full w-[max(100%,var(--page-min-width))]">
         {/* Sheet width = --contact-wrapper-width (content + gap + close). */}
         <div
-          className="animate-slide-in-bl absolute bottom-3 left-3 flex w-[var(--contact-wrapper-width)] max-h-[calc(100vh-var(--spacing-6))] flex-row items-start gap-1 min-[1064px]:w-auto"
+          className={`absolute bottom-3 left-3 flex w-[var(--contact-wrapper-width)] max-h-[calc(100vh-var(--spacing-6))] flex-row items-start gap-1 min-[1064px]:w-auto ${
+            closing ? 'animate-slide-out-bl' : 'animate-slide-in-bl'
+          }`}
           onClick={(event) => event.stopPropagation()}
         >
           {/* Content containers — rounded clip + scroll (close sits outside). */}
@@ -205,6 +215,9 @@ function DesktopSheet({ onClose, onShare }) {
                     src={frankProfile}
                     alt="Frank"
                     className="size-full object-cover object-[50%_60%]"
+                    loading="eager"
+                    decoding="async"
+                    fetchPriority="high"
                   />
                 </div>
 
@@ -325,8 +338,11 @@ function DesktopSheet({ onClose, onShare }) {
 function ContactSheet({ open, onClose }) {
   const isPhone = useIsPhone()
   const [bannerPhase, setBannerPhase] = useState(null)
+  const [visible, setVisible] = useState(open)
   const visibleTimerRef = useRef(null)
   const dissolveTimerRef = useRef(null)
+  const closeTimerRef = useRef(null)
+  const closing = visible && !open
 
   const clearBannerTimers = useCallback(() => {
     clearTimeout(visibleTimerRef.current)
@@ -337,6 +353,21 @@ function ContactSheet({ open, onClose }) {
     clearBannerTimers()
     setBannerPhase(null)
   }, [clearBannerTimers])
+
+  useEffect(() => {
+    clearTimeout(closeTimerRef.current)
+
+    if (open) {
+      setVisible(true)
+      return
+    }
+
+    if (!visible) return
+
+    closeTimerRef.current = setTimeout(() => setVisible(false), CONTACT_EXIT_MS)
+
+    return () => clearTimeout(closeTimerRef.current)
+  }, [open, visible])
 
   const handleShare = useCallback(async () => {
     await copyPortfolioUrl()
@@ -351,9 +382,10 @@ function ContactSheet({ open, onClose }) {
     }, BANNER_VISIBLE_MS)
   }, [clearBannerTimers])
 
-  // Close on Escape and lock body scroll while the sheet is open.
+  // Close on Escape and lock body scroll while the sheet is visible, including
+  // its exit animation.
   useEffect(() => {
-    if (!open) return
+    if (!visible) return
 
     const handleKeyDown = (event) => {
       if (event.key === 'Escape') onClose()
@@ -367,23 +399,29 @@ function ContactSheet({ open, onClose }) {
       document.removeEventListener('keydown', handleKeyDown)
       document.body.style.overflow = previousOverflow
     }
-  }, [open, onClose])
+  }, [visible, onClose])
 
   useEffect(() => {
     if (!open) dismissBanner()
   }, [open, dismissBanner])
 
-  useEffect(() => () => clearBannerTimers(), [clearBannerTimers])
+  useEffect(
+    () => () => {
+      clearBannerTimers()
+      clearTimeout(closeTimerRef.current)
+    },
+    [clearBannerTimers]
+  )
 
-  if (!open) return null
+  if (!visible) return null
 
   return (
     <>
       {bannerPhase && <ShareBanner dissolving={bannerPhase === 'dissolving'} />}
       {isPhone ? (
-        <MobileSheet onClose={onClose} />
+        <MobileSheet onClose={onClose} closing={closing} />
       ) : (
-        <DesktopSheet onClose={onClose} onShare={handleShare} />
+        <DesktopSheet onClose={onClose} onShare={handleShare} closing={closing} />
       )}
     </>
   )
