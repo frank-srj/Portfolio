@@ -4,7 +4,7 @@ import linkedinIcon from '../assets/contact/linkedin.svg'
 import mapPinIcon from '../assets/contact/map-pin.svg'
 import shareIcon from '../assets/contact/share.svg'
 import closeIcon from '../assets/contact/close.svg'
-import cvPdf from '../assets/CV_Stryj-Frank.pdf'
+import cvPdf from '../assets/CV_Stryj,Frank.pdf'
 import { useIsPhone } from '../hooks/useMediaQuery'
 
 const BANNER_VISIBLE_MS = 5000

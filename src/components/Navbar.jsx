@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import cvPdf from "../assets/CV_Stryj-Frank.pdf"
+import cvPdf from "../assets/CV_Stryj,Frank.pdf"
 
 const navLinks = [
   { label: "Work" },
