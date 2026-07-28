@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import CaseStudies from './components/CaseStudies'
@@ -28,11 +28,28 @@ function normalizeRoute(state) {
   }
 }
 
+function blurActiveElement() {
+  requestAnimationFrame(() => {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur()
+    }
+  })
+}
+
 function App() {
   const isPhone = useIsPhone()
   const [route, setRoute] = useState(() => normalizeRoute(window.history.state))
   const { page, contactOpen, activeProject } = route
   const projectOpen = activeProject != null
+  const wasSheetOpen = useRef(projectOpen || contactOpen)
+
+  useEffect(() => {
+    const isSheetOpen = projectOpen || contactOpen
+    if (wasSheetOpen.current && !isSheetOpen) {
+      blurActiveElement()
+    }
+    wasSheetOpen.current = isSheetOpen
+  }, [projectOpen, contactOpen])
 
   const pushRoute = useCallback((nextRoute, { scrollTop = false } = {}) => {
     setRoute(nextRoute)
@@ -60,7 +77,10 @@ function App() {
     )
 
   const closeContact = () => {
-    if (contactOpen) window.history.back()
+    if (contactOpen) {
+      window.history.back()
+      blurActiveElement()
+    }
   }
 
   const openProject = (projectId) =>
@@ -76,6 +96,7 @@ function App() {
       { page, contactOpen: false, activeProject: null },
       { scrollTop: false }
     )
+    blurActiveElement()
   }
 
   const goHome = () => {
@@ -138,6 +159,7 @@ function App() {
         onClose={closeProject}
         onProjectOpen={openProject}
         onColophoneClick={openColophone}
+        contactOpen={contactOpen}
       />
     </div>
   )

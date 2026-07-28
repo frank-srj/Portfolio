@@ -388,7 +388,10 @@ function ContactSheet({ open, onClose }) {
     if (!visible) return
 
     const handleKeyDown = (event) => {
-      if (event.key === 'Escape') onClose()
+      if (event.key !== 'Escape' || !open || closing) return
+      event.preventDefault()
+      event.stopImmediatePropagation()
+      onClose()
     }
 
     document.addEventListener('keydown', handleKeyDown)
@@ -399,7 +402,7 @@ function ContactSheet({ open, onClose }) {
       document.removeEventListener('keydown', handleKeyDown)
       document.body.style.overflow = previousOverflow
     }
-  }, [visible, onClose])
+  }, [visible, open, closing, onClose])
 
   useEffect(() => {
     if (!open) dismissBanner()

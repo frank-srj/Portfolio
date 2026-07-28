@@ -60,7 +60,7 @@ function CaseStudyCard({
           disabled
             ? 'opacity-30'
             : 'group hover:bg-surface-secondary hover:px-[var(--pad-min)]'
-        } ${interactive ? 'cursor-pointer' : ''}`}
+        } ${interactive ? 'cursor-pointer outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-border-primary focus-visible:ring-offset-2' : ''}`}
         style={{
           '--image-base': '683px',
           '--image-height': '378px',

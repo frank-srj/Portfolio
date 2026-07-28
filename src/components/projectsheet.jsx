@@ -1220,7 +1220,14 @@ function OtherProjects({ onProjectOpen }) {
   )
 }
 
-function ProjectSheet({ open, onClose, projectId, onProjectOpen, onColophoneClick }) {
+function ProjectSheet({
+  open,
+  onClose,
+  projectId,
+  onProjectOpen,
+  onColophoneClick,
+  contactOpen = false,
+}) {
   const isPhone = useIsPhone()
   // The sheet's top edge stops spacing-12 below the (sticky) navbar, so the
   // navbar stays visible and interactable above it. Measure the navbar so the
@@ -1324,7 +1331,8 @@ function ProjectSheet({ open, onClose, projectId, onProjectOpen, onColophoneClic
     window.addEventListener('resize', measureNav)
 
     const handleKeyDown = (event) => {
-      if (event.key !== 'Escape' || closing) return
+      if (event.key !== 'Escape' || closing || contactOpen) return
+      event.preventDefault()
       // Close the lightbox first; only then close the sheet.
       if (lightbox) {
         setLightbox(null)
@@ -1342,7 +1350,7 @@ function ProjectSheet({ open, onClose, projectId, onProjectOpen, onColophoneClic
       document.removeEventListener('keydown', handleKeyDown)
       document.body.style.overflow = previousOverflow
     }
-  }, [visible, open, closing, onClose, lightbox])
+  }, [visible, open, closing, onClose, lightbox, contactOpen])
 
   if (!visible) return null
 
