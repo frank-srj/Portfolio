@@ -188,6 +188,10 @@ button {
   cursor: pointer;
 }
 
+[role='button']:focus {
+  outline: none;
+}
+
 @media (hover: hover) and (pointer: fine) {
   #root {
     min-width: var(--page-min-width);

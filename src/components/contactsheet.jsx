@@ -382,27 +382,17 @@ function ContactSheet({ open, onClose }) {
     }, BANNER_VISIBLE_MS)
   }, [clearBannerTimers])
 
-  // Close on Escape and lock body scroll while the sheet is visible, including
-  // its exit animation.
+  // Lock body scroll while the sheet is visible, including its exit animation.
   useEffect(() => {
     if (!visible) return
 
-    const handleKeyDown = (event) => {
-      if (event.key !== 'Escape' || !open || closing) return
-      event.preventDefault()
-      event.stopImmediatePropagation()
-      onClose()
-    }
-
-    document.addEventListener('keydown', handleKeyDown)
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
 
     return () => {
-      document.removeEventListener('keydown', handleKeyDown)
       document.body.style.overflow = previousOverflow
     }
-  }, [visible, open, closing, onClose])
+  }, [visible])
 
   useEffect(() => {
     if (!open) dismissBanner()

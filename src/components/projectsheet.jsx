@@ -1226,7 +1226,6 @@ function ProjectSheet({
   projectId,
   onProjectOpen,
   onColophoneClick,
-  contactOpen = false,
 }) {
   const isPhone = useIsPhone()
   // The sheet's top edge stops spacing-12 below the (sticky) navbar, so the
@@ -1331,14 +1330,9 @@ function ProjectSheet({
     window.addEventListener('resize', measureNav)
 
     const handleKeyDown = (event) => {
-      if (event.key !== 'Escape' || closing || contactOpen) return
+      if (event.key !== 'Escape' || closing || !lightbox) return
       event.preventDefault()
-      // Close the lightbox first; only then close the sheet.
-      if (lightbox) {
-        setLightbox(null)
-      } else {
-        onClose()
-      }
+      setLightbox(null)
     }
     document.addEventListener('keydown', handleKeyDown)
 
@@ -1350,7 +1344,7 @@ function ProjectSheet({
       document.removeEventListener('keydown', handleKeyDown)
       document.body.style.overflow = previousOverflow
     }
-  }, [visible, open, closing, onClose, lightbox, contactOpen])
+  }, [visible, open, closing, lightbox])
 
   if (!visible) return null
 

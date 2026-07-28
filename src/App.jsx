@@ -29,11 +29,16 @@ function normalizeRoute(state) {
 }
 
 function blurActiveElement() {
-  requestAnimationFrame(() => {
+  const blur = () => {
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur()
     }
-  })
+  }
+
+  blur()
+  requestAnimationFrame(blur)
+  setTimeout(blur, 0)
+  setTimeout(blur, 100)
 }
 
 function App() {
@@ -159,7 +164,6 @@ function App() {
         onClose={closeProject}
         onProjectOpen={openProject}
         onColophoneClick={openColophone}
-        contactOpen={contactOpen}
       />
     </div>
   )

@@ -102,20 +102,28 @@ function CaseStudyCard({
     <div
       role={interactive ? 'button' : undefined}
       tabIndex={interactive ? 0 : undefined}
-      onClick={interactive ? onOpen : undefined}
+      onClick={
+        interactive
+          ? (event) => {
+              onOpen()
+              event.currentTarget.blur()
+            }
+          : undefined
+      }
       onKeyDown={
         interactive
           ? (event) => {
               if (event.key === 'Enter' || event.key === ' ') {
                 event.preventDefault()
                 onOpen()
+                event.currentTarget.blur()
               }
             }
           : undefined
       }
       className={`flex w-full flex-col gap-3 rounded-2xl border border-border-primary bg-surface-primary p-3 transition-colors ${
         disabled ? 'opacity-30' : ''
-      } ${interactive ? 'cursor-pointer outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-border-primary focus-visible:ring-offset-2 active:bg-surface-secondary' : ''}`}
+      } ${interactive ? 'cursor-pointer outline-none focus:outline-none active:bg-surface-secondary' : ''}`}
     >
       <div className="aspect-[683/378] w-full overflow-hidden rounded-xl">
         <img

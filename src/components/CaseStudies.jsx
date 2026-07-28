@@ -45,13 +45,21 @@ function CaseStudyCard({
       <div
         role={interactive ? 'button' : undefined}
         tabIndex={interactive ? 0 : undefined}
-        onClick={interactive ? onOpen : undefined}
+        onClick={
+          interactive
+            ? (event) => {
+                onOpen()
+                event.currentTarget.blur()
+              }
+            : undefined
+        }
         onKeyDown={
           interactive
             ? (event) => {
                 if (event.key === 'Enter' || event.key === ' ') {
                   event.preventDefault()
                   onOpen()
+                  event.currentTarget.blur()
                 }
               }
             : undefined
@@ -60,7 +68,7 @@ function CaseStudyCard({
           disabled
             ? 'opacity-30'
             : 'group hover:bg-surface-secondary hover:px-[var(--pad-min)]'
-        } ${interactive ? 'cursor-pointer outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-border-primary focus-visible:ring-offset-2' : ''}`}
+        } ${interactive ? 'cursor-pointer outline-none focus:outline-none' : ''}`}
         style={{
           '--image-base': '683px',
           '--image-height': '378px',
