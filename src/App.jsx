@@ -70,7 +70,12 @@ function App() {
     )
 
   const closeProject = () => {
-    if (projectOpen) window.history.back()
+    if (!projectOpen) return
+
+    pushRoute(
+      { page, contactOpen: false, activeProject: null },
+      { scrollTop: false }
+    )
   }
 
   const goHome = () => {
