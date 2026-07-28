@@ -18,7 +18,7 @@ import urbanProjective from '../assets/case-studies/urban-projective/Urban-Thumb
 import orbitCard from '../assets/case-studies/orbit/Orbit_Thumbnail.webp'
 import figmaCard from '../assets/case-studies/figma-sustainable-mode/Figma-Thumbnail_home.webp'
 
-import figmaBanner from '../assets/case-studies/figma-sustainable-mode/Figma-Thumbnail.webp'
+import figmaBanner from '../assets/case-studies/figma-sustainable-mode/Figma-Thumbnail_01.avif'
 import figmaBannerMobile from '../assets/case-studies/figma-sustainable-mode/Figma_Thumbnail_Mobil.webp'
 import carbonCalculator from '../assets/case-studies/figma-sustainable-mode/carbon-calculator.png'
 import greenSoftware from '../assets/case-studies/figma-sustainable-mode/green-software.png'

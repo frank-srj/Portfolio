@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import frankProfile from '../assets/contact/frank-profile.webp'
+import frankProfile from '../assets/contact/frank.webp'
 import linkedinIcon from '../assets/contact/linkedin.svg'
 import mapPinIcon from '../assets/contact/map-pin.svg'
 import shareIcon from '../assets/contact/share.svg'
